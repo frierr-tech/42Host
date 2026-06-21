@@ -1,0 +1,47 @@
+name: Windows installer
+
+on:
+  push:
+    paths:
+      - ".github/workflows/windows-installer.yml"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "build.rs"
+      - "src/**"
+      - "data/**"
+      - "installer/**"
+      - "scripts/package-windows.sh"
+  workflow_dispatch:
+
+jobs:
+  installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-gtk4
+            mingw-w64-ucrt-x86_64-libadwaita
+            mingw-w64-ucrt-x86_64-pkgconf
+            mingw-w64-ucrt-x86_64-rust
+      - name: Build 42Host
+        shell: msys2 {0}
+        run: cargo build --release
+      - name: Collect GTK runtime
+        shell: msys2 {0}
+        run: bash scripts/package-windows.sh dist
+      - name: Install Inno Setup
+        shell: powershell
+        run: choco install innosetup --no-progress -y
+      - name: Build installer
+        shell: powershell
+        run: '& "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" installer\42host.iss'
+      - uses: actions/upload-artifact@v7
+        with:
+          name: 42Host-Windows-Setup
+          path: installer-output/42HostSetup.exe
+          if-no-files-found: error
