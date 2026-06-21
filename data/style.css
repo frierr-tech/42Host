@@ -1,0 +1,41 @@
+/* 42Host — только layout-нюансы, без жёстко заданных цветов.
+   Цвета берутся из тем GTK/libadwaita через именованные классы и @-переменные. */
+
+.status-dot {
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 9999px;
+    background-color: @insensitive_fg_color;
+}
+.status-dot.running { background-color: @success_color; }
+.status-dot.starting { background-color: @warning_color; }
+.status-dot.crashed { background-color: @error_color; }
+.status-dot.stopped { background-color: @insensitive_fg_color; }
+
+.console-view {
+    font-family: monospace;
+    padding: 8px;
+}
+
+/* Цветовая разметка строк консоли — через классы, не жёсткие цвета. */
+.log-error { color: @error_color; }
+.log-warn  { color: @warning_color; }
+.log-chat  { color: @insensitive_fg_color; }
+
+.server-summary {
+    font-size: 0.85em;
+}
+
+/* Карточки-плитки в сетках плагинов и настроек сервера. */
+flowboxchild {
+    padding: 0;
+}
+flowboxchild > .card {
+    min-width: 140px;
+    padding: 6px;
+}
+
+/* Кликабельная аватарка сервера в шапке — без лишних отступов. */
+button.circular > avatar {
+    margin: 0;
+}

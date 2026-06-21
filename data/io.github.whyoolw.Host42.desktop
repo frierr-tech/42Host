@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=42Host
+Comment=Launch and manage Minecraft servers
+Exec=42host
+Icon=io.github.whyoolw.Host42
+Terminal=false
+Categories=Game;Utility;GNOME;GTK;
+Keywords=minecraft;server;game;
