@@ -1,4 +1,6 @@
-//! 42Host — точка входа. Принудительный нативный Wayland (§12.1).
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
+//! 42Host — кроссплатформенная точка входа.
 
 mod application;
 mod config;
@@ -16,9 +18,6 @@ use gtk::prelude::*;
 const APP_ID: &str = "io.github.whyoolw.Host42";
 
 fn main() -> glib::ExitCode {
-    // §12.1 — принудительно требуем нативный Wayland ещё до инициализации GDK.
-    std::env::set_var("GDK_BACKEND", "wayland");
-
     env_logger::init();
 
     // Регистрируем встроенные ресурсы (style.css).

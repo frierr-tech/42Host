@@ -18,12 +18,6 @@ pub fn build_application() -> adw::Application {
     let win_cell: Rc<RefCell<Option<AppWindow>>> = Rc::new(RefCell::new(None));
 
     app.connect_activate(move |app| {
-        // §12.1 — проверка, что мы действительно на Wayland.
-        if !is_wayland() {
-            show_fatal(app, "42Host требует нативный Wayland. Бэкенд X11/XWayland не поддерживается.");
-            return;
-        }
-
         if let Some(w) = win_cell.borrow().as_ref() {
             w.present();
             return;
@@ -40,25 +34,6 @@ pub fn build_application() -> adw::Application {
     });
 
     app
-}
-
-fn is_wayland() -> bool {
-    match gdk::Display::default() {
-        Some(display) => display.type_().name().contains("Wayland"),
-        None => false,
-    }
-}
-
-fn show_fatal(app: &adw::Application, msg: &str) {
-    let dialog = adw::MessageDialog::new(None::<&gtk::Window>, Some("Ошибка запуска"), Some(msg));
-    dialog.add_response("quit", "Закрыть");
-    dialog.set_application(Some(app));
-    dialog.connect_response(None, |d, _| {
-        if let Some(app) = d.application() {
-            app.quit();
-        }
-    });
-    dialog.present();
 }
 
 fn load_css() {
