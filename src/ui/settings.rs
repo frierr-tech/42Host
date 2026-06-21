@@ -95,6 +95,9 @@ pub fn open(aw: &AppWindow) {
     apps.set_icon_name(Some("applications-utilities-symbolic"));
     let ext = adw::PreferencesGroup::new();
     ext.set_title("Внешние приложения");
+    #[cfg(windows)]
+    ext.set_description(Some("Например: cmd.exe, powershell.exe, wt.exe · notepad.exe, code"));
+    #[cfg(not(windows))]
     ext.set_description(Some("Например: kitty, alacritty, foot · nvim, nano, code"));
 
     let term_row = adw::EntryRow::new();
@@ -117,8 +120,13 @@ pub fn open(aw: &AppWindow) {
         move || {
             let t = term_row.text();
             let e = editor_row.text();
+            #[cfg(windows)]
+            preview.set_subtitle(&format!("{e} <file> · {t} <working directory>"));
+            #[cfg(not(windows))]
+            {
             let sep = if t == "kitty" || t == "foot" { "--" } else { "-e" };
             preview.set_subtitle(&format!("{t} {sep} {e} <file>"));
+            }
         }
     };
     update_preview();

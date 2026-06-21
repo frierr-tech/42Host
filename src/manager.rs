@@ -85,6 +85,16 @@ pub fn spawn_server(
         .stdout(Stdio::piped())
         .stderr(Stdio::piped());
 
+    #[cfg(windows)]
+    {
+        use std::os::windows::process::CommandExt;
+
+        // Java — консольное приложение. Не показываем отдельное окно: вывод уже
+        // перенаправлен в консоль 42Host через stdout/stderr.
+        const CREATE_NO_WINDOW: u32 = 0x0800_0000;
+        command.creation_flags(CREATE_NO_WINDOW);
+    }
+
     let mut child = command.spawn()?;
     let pid = child.id();
 

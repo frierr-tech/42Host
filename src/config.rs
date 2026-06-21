@@ -47,12 +47,27 @@ pub struct AppConfig {
 fn default_console_font_size() -> u32 {
     12
 }
+#[cfg(windows)]
+fn default_terminal() -> String {
+    "cmd.exe".into()
+}
+#[cfg(not(windows))]
 fn default_terminal() -> String {
     "kitty".into()
 }
+#[cfg(windows)]
+fn default_editor() -> String {
+    "notepad.exe".into()
+}
+#[cfg(not(windows))]
 fn default_editor() -> String {
     "nvim".into()
 }
+#[cfg(windows)]
+fn default_file_manager() -> String {
+    "explorer.exe".into()
+}
+#[cfg(not(windows))]
 fn default_file_manager() -> String {
     "xdg-open".into()
 }
