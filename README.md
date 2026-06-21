@@ -24,6 +24,12 @@ cargo run --release
 
 ## Сборка на Windows
 
+### Готовый установщик
+
+Скачайте `42HostSetup.exe` со страницы Releases или из артефакта **Windows installer** в GitHub Actions. Установщик содержит GTK4/libadwaita и по умолчанию сам скачивает приватную Java 21 от Eclipse Adoptium. Rust, MSYS2 и системная Java пользователю не нужны.
+
+### Сборка из исходников
+
 Самый прямой вариант — MSYS2 UCRT64:
 
 1. Установите [MSYS2](https://www.msys2.org/) и откройте терминал **MSYS2 UCRT64**.

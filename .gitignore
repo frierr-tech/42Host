@@ -1,3 +1,6 @@
 /target
 **/*.rs.bk
 Cargo.lock
+/dist/
+/installer-output/
+/42HostSetup.exe

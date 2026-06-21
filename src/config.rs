@@ -71,6 +71,27 @@ fn default_file_manager() -> String {
 fn default_file_manager() -> String {
     "xdg-open".into()
 }
+#[cfg(windows)]
+fn default_java() -> String {
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(bin_dir) = exe.parent() {
+            let candidates = [
+                bin_dir.join("runtime").join("bin").join("java.exe"),
+                bin_dir
+                    .parent()
+                    .map(|dir| dir.join("runtime").join("bin").join("java.exe"))
+                    .unwrap_or_default(),
+            ];
+
+            if let Some(path) = candidates.into_iter().find(|path| path.is_file()) {
+                return path.to_string_lossy().into_owned();
+            }
+        }
+    }
+
+    "java.exe".into()
+}
+#[cfg(not(windows))]
 fn default_java() -> String {
     "java".into()
 }
