@@ -656,13 +656,21 @@ impl AppWindow {
 
     fn do_spawn(&self, server: &Server) {
         let id = server.id.clone();
-        let (handle, rx) = match manager::spawn_server(server) {
+        let (handle, rx, java_path) = match manager::spawn_server(server) {
             Ok(v) => v,
             Err(e) => {
                 ui::toast(&self.0.toasts, &format!("Не удалось запустить: {e}"));
                 return;
             }
         };
+        if java_path != server.java_path {
+            let path = java_path.clone();
+            self.update_server(&id, move |saved| saved.java_path = path);
+            ui::toast(
+                &self.0.toasts,
+                &format!("Путь Java восстановлен: {}", java_path.display()),
+            );
+        }
         {
             let mut st = self.0.state.borrow_mut();
             let rt = st.runtime_mut(&id);
